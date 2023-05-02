@@ -1,4 +1,6 @@
 import React, { Component } from 'react';
+import Lista from './Lista';
+import Detalhe from './Detalhe';
 
 class Weather extends Component {
   state = { listaWeather: [], dadosWeather: null }
@@ -22,32 +24,24 @@ class Weather extends Component {
   buscarDetalhes(id) {
     fetch("https://localhost:7261/weatherforecast/" + id)
       .then(res => res.json())
-      .then(result => console.log(result))
+      .then(result => this.setState({ dadosWeather: result }))
       .catch(error => console.log('error', error));
   }
 
-  
+
 
   render() {
-    let listaLis = [];
+    if (this.state.dadosWeather === null) {
+      return (
+        <Lista lista={this.state.listaWeather}
+          buscarDetalhes={(id) => { this.buscarDetalhes(id) }}
+        />
+      );
+    }else{
+      return <Detalhe dadosPrevisao={this.state.dadosWeather}/>;
+    }
 
-    this.state.listaWeather.forEach(element =>
-      listaLis.push(<li class="list-group-item" onClick={() => this.buscarDetalhes(element.id)}>{element.date.substr(0, 10)}</li>)
-    );
 
-    return (
-      <div class="row">
-        <h4>Olá Weather</h4>
-        <div class="col-6">
-          <ul class="list-group">
-            {listaLis}
-          </ul>
-        </div>
-
-        <div class="col-6">
-        </div>
-      </div>
-    );
   }
 }
 
