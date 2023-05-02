@@ -5,7 +5,6 @@ class Weather extends Component {
 
   componentDidMount() {
     this.buscarDadosIniciais();
-    this.criarDados();
   }
 
   buscarDadosIniciais() {
