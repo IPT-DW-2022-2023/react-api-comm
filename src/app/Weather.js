@@ -5,11 +5,11 @@ import Detalhe from './Detalhe';
 class Weather extends Component {
   state = { listaWeather: [], dadosWeather: null }
 
-  componentDidMount() {
+  async componentDidMount() {
     this.buscarDadosIniciais();
   }
 
-  buscarDadosIniciais() {
+  async buscarDadosIniciais() {
     var requestOptions = {
       method: 'GET',
       redirect: 'follow'
@@ -25,6 +25,25 @@ class Weather extends Component {
     fetch("https://localhost:7261/weatherforecast/" + id)
       .then(res => res.json())
       .then(result => this.setState({ dadosWeather: result }))
+      .catch(error => console.log('error', error));
+  }
+
+  async criarPrevisao() {
+    let obj = {Date: new Date().toJSON(), TemperatureC:20, Summary: "Descrição genérica"};
+
+    var requestOptions = {
+      method: 'POST',
+      redirect: 'follow',
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json"
+      },
+      body: JSON.stringify(obj)
+    };
+
+    fetch("https://localhost:7261/weatherforecast/create", requestOptions)
+      .then(res => res.json())
+      .then(result => console.log(result))
       .catch(error => console.log('error', error));
   }
 
